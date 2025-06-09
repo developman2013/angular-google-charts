@@ -2,7 +2,7 @@ import { Inject, Injectable, LOCALE_ID, NgZone } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { map, mergeMap, switchMap } from 'rxjs/operators';
 
-import { getDefaultConfig } from '../helpers/chart.helper';
+import { getDefaultConfig } from '../helpers/get-default-config';
 import { GoogleChartsConfig, GOOGLE_CHARTS_LAZY_CONFIG } from '../types/google-charts-config';
 
 @Injectable()

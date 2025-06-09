@@ -1,4 +1,3 @@
-// Advanced Dashboard Example - from documentation
 import { Component } from '@angular/core';
 import { Dashboard, ControlWrapper, GoogleChart } from 'angular-google-charts';
 

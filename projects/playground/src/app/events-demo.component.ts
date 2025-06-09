@@ -1,4 +1,3 @@
-// Chart Events Example - from documentation
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GoogleChart, ChartReadyEvent, ChartSelectionChangedEvent } from 'angular-google-charts';

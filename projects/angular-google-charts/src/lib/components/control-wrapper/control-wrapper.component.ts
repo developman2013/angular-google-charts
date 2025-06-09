@@ -10,8 +10,6 @@ import {
   SimpleChanges
 } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
-
-import { generateRandomId } from '../../helpers/id.helper';
 import { ScriptLoaderService } from '../../services/script-loader.service';
 import { FilterType } from '../../types/control-type';
 import { ChartErrorEvent, ChartReadyEvent } from '../../types/events';
@@ -102,7 +100,7 @@ export class ControlWrapperComponent implements OnInit, OnChanges {
    * A generated id assigned to this components DOM element.
    */
   @HostBinding('id')
-  public readonly id = generateRandomId();
+  public readonly id = crypto.randomUUID();
 
   private _controlWrapper?: google.visualization.ControlWrapper;
   private wrapperReadySubject = new ReplaySubject<google.visualization.ControlWrapper>(1);

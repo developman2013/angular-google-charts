@@ -2,7 +2,6 @@ import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EMPTY, of, Subject } from 'rxjs';
 
-import { DataTableService } from '../../services/data-table.service';
 import { ScriptLoaderService } from '../../services/script-loader.service';
 
 import { DashboardComponent } from './dashboard.component';
@@ -25,7 +24,7 @@ describe('DashboardComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DashboardComponent],
-      providers: [ScriptLoaderService, DataTableService]
+      providers: [ScriptLoaderService]
     }).compileComponents();
   });
 
@@ -229,6 +228,7 @@ describe('DashboardComponent', () => {
       component['dashboard'] = dashboardMock as any;
       component['initialized'] = true;
 
+      visualizationMock.arrayToDataTable.mockImplementation(args => args[0]);
       globalThis.google = { visualization: visualizationMock } as any;
 
       const data = [['row 1', 12]];
@@ -243,6 +243,7 @@ describe('DashboardComponent', () => {
       component['dashboard'] = dashboardMock as any;
       component['initialized'] = true;
 
+      visualizationMock.arrayToDataTable.mockImplementation(args => args[0]);
       globalThis.google = { visualization: visualizationMock } as any;
 
       component.data = [];

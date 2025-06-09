@@ -1,4 +1,3 @@
-// Quick Start Example - matches documentation exactly
 import { Component } from '@angular/core';
 import { GoogleChart } from 'angular-google-charts';
 

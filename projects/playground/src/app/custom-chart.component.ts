@@ -1,8 +1,5 @@
-// Custom Chart Example - from documentation
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { ScriptLoaderService } from 'angular-google-charts';
-
-declare let google: unknown;
 
 @Component({
   selector: 'app-custom-chart',

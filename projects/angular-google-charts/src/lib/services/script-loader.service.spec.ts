@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { Subject, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { getDefaultConfig } from '../helpers/chart.helper';
+import { getDefaultConfig } from '../helpers/get-default-config';
 import { GoogleChartsConfig, GOOGLE_CHARTS_CONFIG, GOOGLE_CHARTS_LAZY_CONFIG } from '../types/google-charts-config';
 
 import { ScriptLoaderService } from './script-loader.service';

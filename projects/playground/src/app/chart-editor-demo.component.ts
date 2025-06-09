@@ -1,4 +1,3 @@
-// Chart Editor Example - from documentation
 import { Component, ViewChild } from '@angular/core';
 import { ChartEditor, GoogleChart } from 'angular-google-charts';
 

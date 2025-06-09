@@ -14,8 +14,8 @@ import {
 import { fromEvent, Observable, ReplaySubject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
-import { getPackageForChart } from '../../helpers/chart.helper';
-import { DataTableService } from '../../services/data-table.service';
+import { getPackageForChart } from '../../helpers/get-package-for-chart';
+import { createDataTable } from '../../helpers/create-data-table';
 import { ScriptLoaderService } from '../../services/script-loader.service';
 import { ChartType } from '../../types/chart-type';
 import {
@@ -138,7 +138,6 @@ export class GoogleChartComponent implements ChartBase, OnInit, OnChanges, OnDes
   constructor(
     private element: ElementRef,
     private scriptLoaderService: ScriptLoaderService,
-    private dataTableService: DataTableService,
     @Optional() private dashboard?: DashboardComponent
   ) {}
 
@@ -166,7 +165,7 @@ export class GoogleChartComponent implements ChartBase, OnInit, OnChanges, OnDes
   public ngOnInit() {
     // We don't need to load any chart packages, the chart wrapper will handle this for us
     this.scriptLoaderService.loadChartPackages(getPackageForChart(this.type)).subscribe(() => {
-      this.dataTable = this.dataTableService.create(this.data, this.columns, this.formatters);
+      this.dataTable = createDataTable(this.data, this.columns, this.formatters);
 
       // Only ever create the wrapper once to allow animations to happen when something changes.
       this.wrapper = new google.visualization.ChartWrapper({
@@ -193,7 +192,7 @@ export class GoogleChartComponent implements ChartBase, OnInit, OnChanges, OnDes
     if (this.initialized) {
       let shouldRedraw = false;
       if (changes.data || changes.columns || changes.formatters) {
-        this.dataTable = this.dataTableService.create(this.data, this.columns, this.formatters);
+        this.dataTable = createDataTable(this.data, this.columns, this.formatters);
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         this.wrapper?.setDataTable(this.dataTable!);
         shouldRedraw = true;

@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { combineLatest } from 'rxjs';
 
-import { DataTableService } from '../../services/data-table.service';
+import { createDataTable } from '../../helpers/create-data-table';
 import { ScriptLoaderService } from '../../services/script-loader.service';
 import { ChartErrorEvent } from '../../types/events';
 import { Formatter } from '../../types/formatter';
@@ -80,13 +80,12 @@ export class DashboardComponent implements OnInit, OnChanges {
 
   constructor(
     private element: ElementRef,
-    private loaderService: ScriptLoaderService,
-    private dataTableService: DataTableService
+    private loaderService: ScriptLoaderService
   ) {}
 
   public ngOnInit() {
     this.loaderService.loadChartPackages('controls').subscribe(() => {
-      this.dataTable = this.dataTableService.create(this.data, this.columns, this.formatters);
+      this.dataTable = createDataTable(this.data, this.columns, this.formatters);
       this.createDashboard();
       this.initialized = true;
     });
@@ -98,7 +97,7 @@ export class DashboardComponent implements OnInit, OnChanges {
     }
 
     if (changes.data || changes.columns || changes.formatters) {
-      this.dataTable = this.dataTableService.create(this.data, this.columns, this.formatters);
+      this.dataTable = createDataTable(this.data, this.columns, this.formatters);
 
       if (this.dataTable) {
         this.dashboard?.draw(this.dataTable);

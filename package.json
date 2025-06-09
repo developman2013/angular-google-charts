@@ -5,10 +5,10 @@
   "private": false,
   "scripts": {
     "ng": "ng",
-    "start": "ng serve playground -o",
+    "start": "ng serve playground --configuration standalone -o",
     "build": "ng build angular-google-charts --configuration production",
-    "test": "ng test angular-google-charts --coverage",
-    "lint": "ng lint playground",
+    "test": "ng test",
+    "lint": "ng lint",
     "release": "standard-version",
     "prepare": "husky"
   },

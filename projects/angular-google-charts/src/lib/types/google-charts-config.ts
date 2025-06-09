@@ -1,7 +1,7 @@
 import { inject, InjectionToken } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
-import { getDefaultConfig } from '../helpers/chart.helper';
+import { getDefaultConfig } from '../helpers/get-default-config';
 
 export interface GoogleChartsConfig {
   /**

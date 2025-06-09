@@ -1,6 +1,5 @@
 import { EnvironmentProviders, makeEnvironmentProviders } from '@angular/core';
 import { ScriptLoaderService } from './services/script-loader.service';
-import { DataTableService } from './services/data-table.service';
 import { GoogleChartsConfig, GOOGLE_CHARTS_CONFIG } from './types/google-charts-config';
 
 /**
@@ -22,9 +21,5 @@ import { GoogleChartsConfig, GOOGLE_CHARTS_CONFIG } from './types/google-charts-
  * ```
  */
 export function provideGoogleCharts(config: GoogleChartsConfig = {}): EnvironmentProviders {
-  return makeEnvironmentProviders([
-    ScriptLoaderService,
-    DataTableService,
-    { provide: GOOGLE_CHARTS_CONFIG, useValue: config }
-  ]);
+  return makeEnvironmentProviders([ScriptLoaderService, { provide: GOOGLE_CHARTS_CONFIG, useValue: config }]);
 }
