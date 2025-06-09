@@ -63,7 +63,7 @@ describe('ControlWrapperComponent', () => {
         options: { key: 'value' }
       };
 
-      // @ts-ignore
+      // @ts-expect-error can still be assigned
       component.id = options.containerId;
       component.type = options.controlType;
       component.state = options.state;
@@ -187,7 +187,7 @@ describe('ControlWrapperComponent', () => {
       // This leads to the component subscribing to all events
       component.ngOnInit();
 
-      const readyCallback: Function = visualizationMock.events.addListener.mock.calls[0][2];
+      const readyCallback = visualizationMock.events.addListener.mock.calls[0][2];
 
       const eventMock = 'event';
       readyCallback(eventMock);
@@ -202,7 +202,7 @@ describe('ControlWrapperComponent', () => {
       // This leads to the component subscribing to all events
       component.ngOnInit();
 
-      const errorCallback: Function = visualizationMock.events.addListener.mock.calls[1][2];
+      const errorCallback = visualizationMock.events.addListener.mock.calls[1][2];
 
       const eventMock = 'event';
       errorCallback(eventMock);
@@ -217,7 +217,7 @@ describe('ControlWrapperComponent', () => {
       // This leads to the component subscribing to all events
       component.ngOnInit();
 
-      const stateChangeCallback: Function = visualizationMock.events.addListener.mock.calls[2][2];
+      const stateChangeCallback = visualizationMock.events.addListener.mock.calls[2][2];
 
       const eventMock = 'event';
       stateChangeCallback(eventMock);

@@ -99,7 +99,10 @@ export class DashboardComponent implements OnInit, OnChanges {
 
     if (changes.data || changes.columns || changes.formatters) {
       this.dataTable = this.dataTableService.create(this.data, this.columns, this.formatters);
-      this.dashboard!.draw(this.dataTable!);
+
+      if (this.dataTable) {
+        this.dashboard?.draw(this.dataTable);
+      }
     }
   }
 
@@ -126,28 +129,32 @@ export class DashboardComponent implements OnInit, OnChanges {
       this.dashboard = new google.visualization.Dashboard(this.element.nativeElement);
       this.initializeBindings();
       this.registerEvents();
-      this.dashboard.draw(this.dataTable!);
+      if (!this.dataTable) {
+        console.warn(
+          'No data table provided to the dashboard. Please provide a data table before drawing the dashboard.'
+        );
+      } else {
+        this.dashboard.draw(this.dataTable);
+      }
     });
   }
 
   private registerEvents(): void {
     google.visualization.events.removeAllListeners(this.dashboard);
 
-    const registerDashEvent = (object: any, eventName: string, callback: Function) => {
-      google.visualization.events.addListener(object, eventName, callback);
-    };
-
-    registerDashEvent(this.dashboard, 'ready', () => this.ready.emit());
-    registerDashEvent(this.dashboard, 'error', (error: ChartErrorEvent) => this.error.emit(error));
+    google.visualization.events.addListener(this.dashboard, 'ready', () => this.ready.emit());
+    google.visualization.events.addListener(this.dashboard, 'error', (error: ChartErrorEvent) =>
+      this.error.emit(error)
+    );
   }
 
   private initializeBindings(): void {
     this.controlWrappers.forEach(control => {
       if (Array.isArray(control.for)) {
         const chartWrappers = control.for.map(chart => chart.chartWrapper);
-        this.dashboard!.bind(control.controlWrapper, chartWrappers);
+        this.dashboard?.bind(control.controlWrapper, chartWrappers);
       } else {
-        this.dashboard!.bind(control.controlWrapper, control.for.chartWrapper);
+        this.dashboard?.bind(control.controlWrapper, control.for.chartWrapper);
       }
     });
   }

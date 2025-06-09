@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 declare namespace google {
   namespace visualization {
     export interface ChartEditorOptions {

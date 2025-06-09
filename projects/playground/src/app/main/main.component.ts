@@ -19,9 +19,9 @@ export class MainComponent implements OnInit {
   public charts: {
     title: string;
     type: ChartType;
-    data: any[][];
+    data: unknown[][];
     columns?: Column[];
-    options?: {};
+    options?: Record<string, unknown>;
   }[] = [];
 
   public changingChart = {

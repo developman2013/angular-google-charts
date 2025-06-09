@@ -17,7 +17,7 @@ import { GoogleChart, ChartReadyEvent, ChartSelectionChangedEvent } from 'angula
       (select)="onChartSelect($event)"
       (error)="onChartError($event)"
       (mouseover)="onMouseOver($event)"
-      (mouseleave)="onMouseLeave($event)"
+      (mouseleave)="onMouseLeave()"
     >
     </google-chart>
 
@@ -80,16 +80,16 @@ export class EventsDemoComponent {
     console.log('Selection changed:', event.selection);
   }
 
-  onChartError(event: any) {
+  onChartError(event: { message: string }) {
     this.addEvent(`Chart error: ${event.message}`);
     console.error('Chart error:', event);
   }
 
-  onMouseOver(event: any) {
+  onMouseOver(event: { row?: number; column?: number }) {
     this.addEvent(`Mouse over: row ${event.row}, column ${event.column}`);
   }
 
-  onMouseLeave(event: any) {
+  onMouseLeave() {
     this.addEvent('Mouse leave');
   }
 

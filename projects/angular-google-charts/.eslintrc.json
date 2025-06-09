@@ -1,0 +1,28 @@
+{
+  "extends": "../../.eslintrc.json",
+  "ignorePatterns": ["!**/*"],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "rules": {
+        "@angular-eslint/no-output-native": "off",
+        "@angular-eslint/component-selector": "off",
+        "@angular-eslint/directive-selector": "off",
+        "@angular-eslint/no-host-metadata-property": "off",
+        "@angular-eslint/component-class-suffix": "off",
+        "@typescript-eslint/triple-slash-reference": "off",
+        "@typescript-eslint/no-explicit-any": "off" // TODO: Maybe we can re-enable this at a later point
+      }
+    },
+    {
+      "files": ["*.spec.ts"],
+      "rules": {
+        "@typescript-eslint/no-empty-function": "off"
+      }
+    },
+    {
+      "files": ["*.html"],
+      "rules": {}
+    }
+  ]
+}

@@ -48,7 +48,10 @@ export class ChartWrapperComponent implements ChartBase, OnChanges, OnInit {
   private wrapperReadySubject = new ReplaySubject<google.visualization.ChartWrapper>(1);
   private initialized = false;
 
-  constructor(private element: ElementRef, private scriptLoaderService: ScriptLoaderService) {}
+  constructor(
+    private element: ElementRef,
+    private scriptLoaderService: ScriptLoaderService
+  ) {}
 
   public get chart(): google.visualization.ChartBase | null {
     return this.chartWrapper.getChart();
@@ -78,7 +81,7 @@ export class ChartWrapperComponent implements ChartBase, OnChanges, OnInit {
         this.specs = {} as google.visualization.ChartSpecs;
       }
 
-      const { containerId, container, ...specs } = this.specs;
+      const { containerId: _, container: __, ...specs } = this.specs;
 
       // Only ever create the wrapper once to allow animations to happen if something changes.
       this.wrapper = new google.visualization.ChartWrapper({
@@ -115,14 +118,16 @@ export class ChartWrapperComponent implements ChartBase, OnChanges, OnInit {
     // The typing here are not correct. These methods accept `undefined` as well.
     // That's why we have to cast to `any`
 
-    this.wrapper!.setChartType(this.specs.chartType);
-    this.wrapper!.setDataTable(this.specs.dataTable as any);
-    this.wrapper!.setDataSourceUrl(this.specs.dataSourceUrl as any);
-    this.wrapper!.setDataSourceUrl(this.specs.dataSourceUrl as any);
-    this.wrapper!.setQuery(this.specs.query as any);
-    this.wrapper!.setOptions(this.specs.options as any);
-    this.wrapper!.setRefreshInterval(this.specs.refreshInterval as any);
-    this.wrapper!.setView(this.specs.view);
+    if (this.wrapper) {
+      this.wrapper.setChartType(this.specs.chartType);
+      this.wrapper.setDataTable(this.specs.dataTable as any);
+      this.wrapper.setDataSourceUrl(this.specs.dataSourceUrl as any);
+      this.wrapper.setDataSourceUrl(this.specs.dataSourceUrl as any);
+      this.wrapper.setQuery(this.specs.query as any);
+      this.wrapper.setOptions(this.specs.options as any);
+      this.wrapper.setRefreshInterval(this.specs.refreshInterval as any);
+      this.wrapper.setView(this.specs.view);
+    }
   }
 
   private drawChart() {
@@ -134,13 +139,11 @@ export class ChartWrapperComponent implements ChartBase, OnChanges, OnInit {
   private registerChartEvents() {
     google.visualization.events.removeAllListeners(this.wrapper);
 
-    const registerChartEvent = (object: any, eventName: string, callback: Function) => {
-      google.visualization.events.addListener(object, eventName, callback);
-    };
-
-    registerChartEvent(this.wrapper, 'ready', () => this.ready.emit({ chart: this.chart! }));
-    registerChartEvent(this.wrapper, 'error', (error: ChartErrorEvent) => this.error.emit(error));
-    registerChartEvent(this.wrapper, 'select', () => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    google.visualization.events.addListener(this.wrapper, 'ready', () => this.ready.emit({ chart: this.chart! }));
+    google.visualization.events.addListener(this.wrapper, 'error', (error: ChartErrorEvent) => this.error.emit(error));
+    google.visualization.events.addListener(this.wrapper, 'select', () => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const selection = this.chart!.getSelection();
       this.select.emit({ selection });
     });

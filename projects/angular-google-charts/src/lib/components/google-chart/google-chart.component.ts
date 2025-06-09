@@ -132,7 +132,8 @@ export class GoogleChartComponent implements ChartBase, OnInit, OnChanges, OnDes
   private wrapper: google.visualization.ChartWrapper | undefined;
   private wrapperReadySubject = new ReplaySubject<google.visualization.ChartWrapper>(1);
   private initialized = false;
-  private eventListeners = new Map<any, { eventName: string; callback: Function; handle: any }>();
+
+  private eventListeners = new Map<any, { eventName: string; callback: (...args: any[]) => void; handle: any }>();
 
   constructor(
     private element: ElementRef,
@@ -141,7 +142,7 @@ export class GoogleChartComponent implements ChartBase, OnInit, OnChanges, OnDes
     @Optional() private dashboard?: DashboardComponent
   ) {}
 
-  public get chart(): google.visualization.ChartBase | null {
+  public get chart() {
     return this.chartWrapper.getChart();
   }
 
@@ -193,17 +194,18 @@ export class GoogleChartComponent implements ChartBase, OnInit, OnChanges, OnDes
       let shouldRedraw = false;
       if (changes.data || changes.columns || changes.formatters) {
         this.dataTable = this.dataTableService.create(this.data, this.columns, this.formatters);
-        this.wrapper!.setDataTable(this.dataTable!);
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        this.wrapper?.setDataTable(this.dataTable!);
         shouldRedraw = true;
       }
 
       if (changes.type) {
-        this.wrapper!.setChartType(this.type);
+        this.wrapper?.setChartType(this.type);
         shouldRedraw = true;
       }
 
       if (changes.options || changes.width || changes.height || changes.title) {
-        this.wrapper!.setOptions(this.mergeOptions());
+        this.wrapper?.setOptions(this.mergeOptions());
         shouldRedraw = true;
       }
 
@@ -224,7 +226,7 @@ export class GoogleChartComponent implements ChartBase, OnInit, OnChanges, OnDes
    *
    * Returns a handle that can be used for `removeEventListener`.
    */
-  public addEventListener(eventName: string, callback: Function): any {
+  public addEventListener(eventName: string, callback: (...args: any[]) => void): any {
     const handle = this.registerChartEvent(this.chart, eventName, callback);
     this.eventListeners.set(handle, { eventName, callback, handle });
     return handle;
@@ -277,18 +279,21 @@ export class GoogleChartComponent implements ChartBase, OnInit, OnChanges, OnDes
       this.registerChartEvent(this.chart, 'onmouseover', (event: ChartMouseOverEvent) => this.mouseover.emit(event));
       this.registerChartEvent(this.chart, 'onmouseout', (event: ChartMouseLeaveEvent) => this.mouseleave.emit(event));
       this.registerChartEvent(this.chart, 'select', () => {
-        const selection = this.chart!.getSelection();
-        this.select.emit({ selection });
+        const selection = this.chart?.getSelection();
+        if (selection != null) {
+          this.select.emit({ selection });
+        }
       });
       this.eventListeners.forEach(x => (x.handle = this.registerChartEvent(this.chart, x.eventName, x.callback)));
 
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       this.ready.emit({ chart: this.chart! });
     });
 
     this.registerChartEvent(this.wrapper, 'error', (error: ChartErrorEvent) => this.error.emit(error));
   }
 
-  private registerChartEvent(object: any, eventName: string, callback: Function): any {
+  private registerChartEvent(object: any, eventName: string, callback: (...args: any[]) => void): any {
     return google.visualization.events.addListener(object, eventName, callback);
   }
 
@@ -298,6 +303,6 @@ export class GoogleChartComponent implements ChartBase, OnInit, OnChanges, OnDes
       return;
     }
 
-    this.wrapper!.draw();
+    this.wrapper?.draw();
   }
 }

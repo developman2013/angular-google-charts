@@ -204,7 +204,7 @@ describe('ScriptLoaderService', () => {
         globalThis.google = { charts: chartsMock } as any;
 
         const chart = 'corechart';
-        let loadCallback: Function;
+        let loadCallback: (() => void) | undefined;
 
         chartsMock.setOnLoadCallback.mockImplementation(callback => (loadCallback = callback));
 
@@ -213,8 +213,8 @@ describe('ScriptLoaderService', () => {
 
         expect(loadedSpy).not.toHaveBeenCalled();
 
-        expect(loadCallback!).toBeTruthy();
-        loadCallback!();
+        expect(loadCallback).toBeTruthy();
+        loadCallback?.();
         expect(loadedSpy).toHaveBeenCalled();
       });
 

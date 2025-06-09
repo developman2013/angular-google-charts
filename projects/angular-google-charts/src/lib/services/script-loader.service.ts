@@ -56,7 +56,7 @@ export class ScriptLoaderService {
             safeMode: googleChartsConfig.safeMode
           };
 
-          google.charts.load(googleChartsConfig.version!, config);
+          google.charts.load(googleChartsConfig.version ?? 'current', config);
           google.charts.setOnLoadCallback(() => {
             this.zone.run(() => {
               observer.next();
