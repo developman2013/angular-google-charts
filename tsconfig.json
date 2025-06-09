@@ -3,24 +3,20 @@
   "compilerOptions": {
     "baseUrl": "./",
     "importHelpers": true,
-    "module": "es2020",
-    "outDir": "./dist/out-tsc",
-    "sourceMap": true,
-    "declaration": false,
+    "module": "ES2020",
     "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
     "experimentalDecorators": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
     "strict": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
     "target": "ES2022",
-    "typeRoots": ["node_modules/@types"],
-    "lib": ["es2017", "dom"],
-    "noUnusedLocals": true,
     "paths": {
       "angular-google-charts": ["projects/angular-google-charts/src/index.ts"]
-    },
-    "useDefineForClassFields": false
+    }
   },
   "angularCompilerOptions": {
     "skipTemplateCodegen": true,

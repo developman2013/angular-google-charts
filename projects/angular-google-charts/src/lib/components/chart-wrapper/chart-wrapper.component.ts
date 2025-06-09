@@ -102,7 +102,7 @@ export class ChartWrapperComponent implements ChartBase, OnChanges, OnInit {
       return;
     }
 
-    if (changes.specs) {
+    if (changes['specs']) {
       this.updateChart();
       this.drawChart();
     }
