@@ -1,4 +1,4 @@
-import { inject, InjectFlags, InjectionToken } from '@angular/core';
+import { inject, InjectionToken } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
 import { getDefaultConfig } from '../helpers/chart.helper';
@@ -49,7 +49,8 @@ export const GOOGLE_CHARTS_LAZY_CONFIG = new InjectionToken<Observable<GoogleCha
   {
     providedIn: 'root',
     factory: () => {
-      const configFromModule = inject(GOOGLE_CHARTS_CONFIG, InjectFlags.Optional);
+      // Using options object instead of deprecated InjectFlags.Optional (Angular 20 compatibility)
+      const configFromModule = inject(GOOGLE_CHARTS_CONFIG, { optional: true });
       return of({ ...getDefaultConfig(), ...(configFromModule || {}) });
     }
   }
