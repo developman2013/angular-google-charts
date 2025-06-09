@@ -2,6 +2,18 @@
 module.exports = {
   resetMocks: true,
   transform: {
-    '^.+\\.ts?$': ['ts-jest', { diagnostics: { ignoreCodes: ['TS151001'] } }]
+    '^.+\\.ts?$': [
+      'ts-jest',
+      {
+        diagnostics: {
+          ignoreCodes: ['TS151001'],
+          warnOnly: true
+        },
+        tsconfig: {
+          esModuleInterop: true,
+          allowSyntheticDefaultImports: true
+        }
+      }
+    ]
   }
 };

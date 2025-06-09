@@ -44,14 +44,25 @@ describe('ScriptLoaderService', () => {
   });
 
   describe('loadChartPackages', () => {
-    it('should load the google charts script before trying to load packages', () => {
-      const createElementSpy = jest.spyOn(document, 'createElement').mockReturnValue({} as any);
+    let createElementSpy: jest.SpyInstance;
+    let getElementsByTagNameSpy: jest.SpyInstance;
 
+    beforeEach(() => {
+      createElementSpy = jest.spyOn(document, 'createElement');
+      getElementsByTagNameSpy = jest.spyOn(document, 'getElementsByTagName');
+    });
+
+    afterEach(() => {
+      createElementSpy?.mockRestore();
+      getElementsByTagNameSpy?.mockRestore();
+      jest.clearAllMocks();
+    });
+
+    it('should load the google charts script before trying to load packages', () => {
       const headMock = { appendChild: jest.fn() };
-      jest
-        .spyOn(document, 'getElementsByTagName')
-        .mockReturnValueOnce([] as any)
-        .mockReturnValueOnce([headMock] as any);
+      createElementSpy.mockReturnValue({} as any);
+
+      getElementsByTagNameSpy.mockReturnValueOnce([] as any).mockReturnValueOnce([headMock] as any);
 
       service.loadChartPackages().subscribe();
 
@@ -72,6 +83,12 @@ describe('ScriptLoaderService', () => {
       beforeEach(() => {
         createElementSpy = jest.spyOn(document, 'createElement').mockImplementation();
         getElementsByTagNameSpy = jest.spyOn(document, 'getElementsByTagName').mockImplementation();
+      });
+
+      afterEach(() => {
+        createElementSpy?.mockRestore();
+        getElementsByTagNameSpy?.mockRestore();
+        jest.clearAllMocks();
       });
 
       it('should not load the script if it is already loaded', () => {
@@ -201,69 +218,85 @@ describe('ScriptLoaderService', () => {
         expect(loadedSpy).toHaveBeenCalled();
       });
 
-      it('should use injected config values', () => {
-        globalThis.google = { charts: chartsMock } as any;
+      describe('with injected config values', () => {
+        let localService: ScriptLoaderService;
 
-        TestBed.resetTestingModule();
+        beforeEach(() => {
+          const version = 'current';
+          const mapsApiKey = 'mapsApiKey';
+          const safeMode = true;
+          const locale = 'de-DE';
 
-        const version = 'current';
-        const mapsApiKey = 'mapsApiKey';
-        const safeMode = true;
-        const locale = 'de-DE';
+          TestBed.resetTestingModule();
+          TestBed.configureTestingModule({
+            providers: [
+              ScriptLoaderService,
+              { provide: LOCALE_ID, useValue: locale },
+              { provide: GOOGLE_CHARTS_CONFIG, useValue: { version, mapsApiKey, safeMode } }
+            ]
+          });
 
-        TestBed.configureTestingModule({
-          providers: [
-            ScriptLoaderService,
-            { provide: LOCALE_ID, useValue: locale },
-            { provide: GOOGLE_CHARTS_CONFIG, useValue: { version, mapsApiKey, safeMode } }
-          ]
+          globalThis.google = { charts: chartsMock } as any;
+          localService = TestBed.inject(ScriptLoaderService);
         });
-        service = TestBed.inject(ScriptLoaderService);
 
-        const chart = 'corechart';
+        it('should use injected config values', () => {
+          const version = 'current';
+          const mapsApiKey = 'mapsApiKey';
+          const safeMode = true;
+          const locale = 'de-DE';
+          const chart = 'corechart';
 
-        service.loadChartPackages(chart).subscribe();
+          localService.loadChartPackages(chart).subscribe();
 
-        expect(chartsMock.load).toHaveBeenCalledWith(version, {
-          packages: [chart],
-          language: locale,
-          mapsApiKey,
-          safeMode
+          expect(chartsMock.load).toHaveBeenCalledWith(version, {
+            packages: [chart],
+            language: locale,
+            mapsApiKey,
+            safeMode
+          });
         });
       });
 
-      it('should use injected lazy config values', () => {
-        globalThis.google = { charts: chartsMock } as any;
+      describe('with injected lazy config values', () => {
+        let localService: ScriptLoaderService;
+        let lazyConfigSubject: Subject<GoogleChartsConfig>;
 
-        TestBed.resetTestingModule();
+        beforeEach(() => {
+          const locale = 'en-US';
+          lazyConfigSubject = new Subject<GoogleChartsConfig>();
 
-        const mapsApiKey = 'mapsApiKey';
-        const safeMode = false;
-        const locale = 'en-US';
-        const lazyConfigSubject = new Subject<GoogleChartsConfig>();
+          TestBed.resetTestingModule();
+          TestBed.configureTestingModule({
+            providers: [
+              ScriptLoaderService,
+              { provide: LOCALE_ID, useValue: locale },
+              { provide: GOOGLE_CHARTS_LAZY_CONFIG, useValue: lazyConfigSubject.asObservable() }
+            ]
+          });
 
-        TestBed.configureTestingModule({
-          providers: [
-            ScriptLoaderService,
-            { provide: LOCALE_ID, useValue: locale },
-            { provide: GOOGLE_CHARTS_LAZY_CONFIG, useValue: lazyConfigSubject.asObservable() }
-          ]
+          globalThis.google = { charts: chartsMock } as any;
+          localService = TestBed.inject(ScriptLoaderService);
         });
-        service = TestBed.inject(ScriptLoaderService);
 
-        const chart = 'corechart';
+        it('should use injected lazy config values', () => {
+          const mapsApiKey = 'mapsApiKey';
+          const safeMode = false;
+          const locale = 'en-US';
+          const chart = 'corechart';
 
-        service.loadChartPackages(chart).subscribe();
+          localService.loadChartPackages(chart).subscribe();
 
-        expect(chartsMock.load).not.toHaveBeenCalled();
+          expect(chartsMock.load).not.toHaveBeenCalled();
 
-        lazyConfigSubject.next({ mapsApiKey, safeMode });
+          lazyConfigSubject.next({ mapsApiKey, safeMode });
 
-        expect(chartsMock.load).toHaveBeenCalledWith(getDefaultConfig().version, {
-          packages: [chart],
-          language: locale,
-          mapsApiKey,
-          safeMode
+          expect(chartsMock.load).toHaveBeenCalledWith(getDefaultConfig().version, {
+            packages: [chart],
+            language: locale,
+            mapsApiKey,
+            safeMode
+          });
         });
       });
     });

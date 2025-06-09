@@ -19,5 +19,10 @@ export * from './lib/types/formatter';
 export * from './lib/types/google-charts-config';
 
 export * from './lib/services/script-loader.service';
+export * from './lib/services/data-table.service';
 
 export * from './lib/google-charts.module';
+export * from './lib/providers';
+
+// Standalone components
+export * from './lib/standalone';

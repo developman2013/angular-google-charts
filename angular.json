@@ -53,6 +53,9 @@
             "scripts": []
           },
           "configurations": {
+            "standalone": {
+              "main": "projects/playground/src/standalone-main.ts"
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -90,6 +93,9 @@
           "configurations": {
             "production": {
               "browserTarget": "playground:build:production"
+            },
+            "standalone": {
+              "browserTarget": "playground:build:standalone"
             }
           }
         }
