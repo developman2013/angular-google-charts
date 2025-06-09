@@ -7,9 +7,9 @@ import { Dashboard, ControlWrapper, GoogleChart } from 'angular-google-charts';
   imports: [Dashboard, ControlWrapper, GoogleChart],
   template: `
     <h2>Interactive Dashboard Demo</h2>
-    <dashboard [data]="dashboardData" [columns]="dashboardColumns">
+    <dashboard [columns]="dashboardColumns" [data]="dashboardData">
       <control-wrapper [for]="myChart" type="CategoryFilter"></control-wrapper>
-      <google-chart #myChart type="ColumnChart"></google-chart>
+      <google-chart #myChart type="ColumnChart" [data]="dashboardData"></google-chart>
     </dashboard>
   `,
   styles: [
@@ -26,6 +26,7 @@ import { Dashboard, ControlWrapper, GoogleChart } from 'angular-google-charts';
   ]
 })
 export class DashboardDemoComponent {
+  dashboardColumns = ['Category', 'Value'];
   dashboardData = [
     ['A', 20],
     ['B', 35],
@@ -33,6 +34,4 @@ export class DashboardDemoComponent {
     ['D', 25],
     ['E', 30]
   ];
-
-  dashboardColumns = ['Category', 'Value'];
 }

@@ -2,11 +2,6 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { provideGoogleCharts } from 'angular-google-charts';
 import { StandaloneAppComponent } from './app/standalone-app.component';
-import { environment } from './environments/environment';
-
-if (environment.production) {
-  // enableProdMode(); // This is done automatically in Angular 19+
-}
 
 bootstrapApplication(StandaloneAppComponent, {
   providers: [
@@ -16,4 +11,4 @@ bootstrapApplication(StandaloneAppComponent, {
       version: '49'
     })
   ]
-}).catch(err => console.error(err));
+}).catch((err: unknown) => console.error(err));

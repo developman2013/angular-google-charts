@@ -4,6 +4,6 @@
     "outDir": "../../out-tsc/app",
     "types": ["google.visualization"]
   },
-  "files": ["src/main.ts", "src/standalone-main.ts", "src/polyfills.ts"],
+  "files": ["src/main.standalone.ts", "src/polyfills.ts"],
   "include": ["src/**/*.d.ts"]
 }

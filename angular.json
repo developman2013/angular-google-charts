@@ -51,16 +51,17 @@
             "aot": true,
             "outputPath": "dist/playground",
             "index": "projects/playground/src/index.html",
-            "main": "projects/playground/src/main.ts",
             "polyfills": "projects/playground/src/polyfills.ts",
-            "tsConfig": "projects/playground/tsconfig.app.json",
+            "main": "projects/playground/src/main.standalone.ts",
+            "tsConfig": "projects/playground/tsconfig.standalone.json",
             "assets": ["projects/playground/src/favicon.ico", "projects/playground/src/assets"],
             "styles": ["projects/playground/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
-            "standalone": {
-              "main": "projects/playground/src/standalone-main.ts"
+            "legacy": {
+              "main": "projects/playground/src/main.modules.ts",
+              "tsConfig": "projects/playground/tsconfig.modules.json"
             },
             "production": {
               "fileReplacements": [
